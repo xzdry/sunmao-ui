@@ -2,8 +2,8 @@ import { css } from '@emotion/react';
 import { ApplicationComponent } from '@sunmao-ui/core';
 import React, { useRef } from 'react';
 import { eventBus } from '../eventBus';
-import { genOperation } from 'operations';
-import { PasteManager } from 'operations/PasteManager';
+import { genOperation } from '../operations';
+import { PasteManager } from '../operations/PasteManager';
 
 type Props = {
   selectedComponentId: string;
