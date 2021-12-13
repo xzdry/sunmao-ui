@@ -17,7 +17,7 @@ export class RepeatIdValidatorRule implements AllComponentsValidatorRule {
     components.forEach(component => {
       if (componentIds.has(component.id)) {
         results.push(
-          new ValidateResult('Duplicate component id', component.id, 0, () => {
+          new ValidateResult('Duplicate component id.', component.id, '', () => {
             component.id = `${component.id}_${Math.floor(Math.random() * 10000)}`;
           })
         );
@@ -36,8 +36,7 @@ export class ParentValidatorRule implements AllComponentsValidatorRule {
     const results: ValidateResult[] = [];
     const componentIds = components.map(component => component.id);
     components.forEach(c => {
-      const slotTraitIndex = c.traits.findIndex(t => t.type === 'core/v1/slot');
-      const slotTrait = c.traits[slotTraitIndex];
+      const slotTrait = c.traits.find(t => t.type === 'core/v1/slot');
       if (slotTrait) {
         const { id: parentId } = slotTrait.properties.container as any;
         if (!componentIds.includes(parentId)) {
@@ -45,7 +44,7 @@ export class ParentValidatorRule implements AllComponentsValidatorRule {
             new ValidateResult(
               `Cannot find parent component: ${parentId}.`,
               c.id,
-              slotTraitIndex,
+              slotTrait.type,
               () => {
                 slotTrait.properties.container = {
                   id: componentIds[0],
@@ -80,9 +79,9 @@ export class ComponentPropertyValidatorRule implements ComponentValidatorRule {
     const validate = ajv.compile(propertySchema);
     const valid = validate(component.properties);
     if (!valid) {
-      console.log('validate.errors', validate.errors)
       validate.errors!.forEach(error => {
-        let errorMsg = error.message;
+        const readablePath = error.instancePath ? error.instancePath.slice(1).replace("/", '.') : '';
+        let errorMsg = `${readablePath} ${error.message}`;
         if (error.keyword === 'type') {
           const { instancePath } = error;
           const path = instancePath.split('/')[1];
@@ -91,7 +90,7 @@ export class ComponentPropertyValidatorRule implements ComponentValidatorRule {
           if (typeof value === 'string' && regExp.test(value)) {
             return;
           } else {
-            errorMsg = `${error.instancePath} ${error.message}`;
+            errorMsg = `Property '${error.instancePath.slice(1).replace("/", '.')}' must be ${error.params.type}.`;
           }
         }
 
@@ -107,13 +106,12 @@ export class TraitPropertyValidatorRule implements TraitValidatorRule {
   validate({ trait, component, registry, ajv }: TraitValidateContext): ValidateResult[] {
     const results: ValidateResult[] = [];
     const spec = registry.getTraitByType(trait.type);
-    const traitIndex = component.traits.indexOf(trait);
     if (!spec) {
       results.push(
         new ValidateResult(
           `Cannot find trait spec: ${trait.type}.`,
           component.id,
-          traitIndex
+          trait.type,
         )
       );
       return results;
@@ -125,9 +123,9 @@ export class TraitPropertyValidatorRule implements TraitValidatorRule {
     const validate = ajv.compile(propertySchema);
     const valid = validate(trait.properties);
     if (!valid) {
-      console.log('validate.errors', validate.errors)
       validate.errors!.forEach(error => {
-        let errorMsg = error.message;
+        const readablePath = error.instancePath ? error.instancePath.slice(1).replace("/", '.') : '';
+        let errorMsg = `${readablePath} ${error.message}`;
         if (error.keyword === 'type') {
           const { instancePath } = error;
           const path = instancePath.split('/')[1];
@@ -136,11 +134,10 @@ export class TraitPropertyValidatorRule implements TraitValidatorRule {
           if (typeof value === 'string' && regExp.test(value)) {
             return;
           } else {
-            errorMsg = `${error.instancePath} ${error.message}`;
+            errorMsg = `Property '${readablePath}' must be ${error.params.type}.`;
           }
         }
-        console.log('propertySchema', propertySchema)
-        results.push(new ValidateResult(errorMsg || '', component.id, traitIndex));
+        results.push(new ValidateResult(errorMsg || '', component.id, trait.type));
       });
     }
     return results;

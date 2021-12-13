@@ -1,16 +1,16 @@
 export class ValidateResult {
   position = {
     componentId: '',
-    traitIndex: -1,
+    traitType: '',
   };
   isValid = false
   constructor(
     public message: string,
     componentId = '',
-    traitIndex = -1,
+    traitType = '',
     public fix: () => void = () => undefined
   ) {
     this.position.componentId = componentId;
-    this.position.traitIndex = traitIndex;
+    this.position.traitType = traitType;
   }
 }

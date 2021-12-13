@@ -3,6 +3,7 @@ import { ApplicationComponent } from '@sunmao-ui/core';
 import { eventBus } from './eventBus';
 import { AppStorage } from './AppStorage';
 import { registry, stateManager } from './setup';
+import { SchemaValidator } from './validator';
 
 type EditingTarget = {
   kind: 'app' | 'module';
@@ -23,6 +24,7 @@ class EditorStore {
   };
 
   appStorage = new AppStorage();
+  schemaValidator = new SchemaValidator();
 
   get app() {
     return this.appStorage.app;
@@ -34,6 +36,10 @@ class EditorStore {
 
   get selectedComponent() {
     return this.components.find(c => c.id === this.selectedComponentId);
+  }
+
+  get validateResult() {
+    return this.schemaValidator.validate(this.components)
   }
 
   constructor() {
@@ -48,12 +54,15 @@ class EditorStore {
     // listen the change by operations, and save newComponents
     eventBus.on('componentsChange', components => {
       this.setComponents(components);
-      this.appStorage.saveComponentsInLS(
-        this.currentEditingTarget.kind,
-        this.currentEditingTarget.version,
-        this.currentEditingTarget.name,
-        components
-      );
+      
+      if (this.validateResult.length === 0) {
+        this.appStorage.saveComponentsInLS(
+          this.currentEditingTarget.kind,
+          this.currentEditingTarget.version,
+          this.currentEditingTarget.name,
+          components
+        );
+      }
     });
 
     reaction(() => this.currentEditingTarget, (target) => {

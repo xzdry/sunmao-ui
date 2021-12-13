@@ -63,7 +63,7 @@ export const UserCenterApp: Application = {
         traits: [
           {
             type: 'core/v1/slot',
-            properties: { container: { id: 'root', slot: 'root' } },
+            properties: { container: { id: 'root2', slot: 'root' } },
           },
         ],
       },
@@ -495,7 +495,6 @@ export const UserCenterApp: Application = {
           {
             type: 'core/v1/fetch',
             properties: {
-              url: 'https://192.168.1.1',
               method: 'post',
               lazy: true,
               headers: { 'content-type': 'application/json' },
@@ -596,7 +595,7 @@ export const UserCenterApp: Application = {
         ],
       },
       {
-        id: 'userInfoContainer',
+        id: 'userInfoHeader',
         type: 'chakra_ui/v1/vstack',
         properties: { spacing: '2', align: 'stretch' },
         traits: [
@@ -765,7 +764,7 @@ export const UserCenterApp: Application = {
           {
             type: 'core/v1/slot',
             properties: {
-              container: { id: 'usersGridLayout', slot: 'content' },
+              container: { id: 'hh233', slot: 'content' },
             },
           },
         ],
@@ -1022,7 +1021,7 @@ export const UserCenterApp: Application = {
         type: 'chakra_ui/v1/list',
         properties: {
           listData:
-            "{{usersTable.selectedItem ? _.toPairs(_.groupBy(usersTable.selectedItem.roles, 'system.name')) : undefined}}",
+            "{{usersTable.sele}",
           template: {
             id: 'RoleListItem-{{$i}}',
             type: 'userCenter/v1/infoRow',
@@ -1100,7 +1099,6 @@ export const UserCenterApp: Application = {
             properties: {
               handlers: [
                 {
-                  type: 'onClick',
                   componentId: 'isUpdateRole',
                   method: {
                     name: 'setValue',
