@@ -55,8 +55,6 @@ export default {
       name: 'hstack',
       description: 'chakra-ui hstack',
       displayName: 'HStack',
-      isDraggable: true,
-      isResizable: true,
       exampleProperties: {
         spacing: '24px',
       },
@@ -64,11 +62,8 @@ export default {
     },
     spec: {
       properties: PropsSchema,
-      state: {},
-      methods: [],
       slots: ['content'],
       styleSlots: ['content'],
-      events: [],
     },
   }),
   impl: HStack,
