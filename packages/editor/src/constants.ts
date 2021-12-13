@@ -95,7 +95,7 @@ export const UserCenterApp: Application = {
         traits: [
           {
             type: 'core/v1/slot',
-            properties: { container: { id: 'hhhh', slot: 'content' } },
+            properties: { container: { id: 'tabs1', slot: 'content' } },
           },
         ],
       },
@@ -114,7 +114,7 @@ export const UserCenterApp: Application = {
         ],
       },
       {
-        id: 'isUpdateRole',
+        id: 'isUpdatePosition',
         type: 'core/v1/dummy',
         properties: {},
         traits: [

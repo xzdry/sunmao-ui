@@ -4,16 +4,8 @@ import { Stack as BaseStack } from '@chakra-ui/react';
 import { ComponentImplementation } from '../../services/registry';
 import Slot from '../_internal/Slot';
 
-export const DirectionSchema = Type.Union([
-  Type.KeyOf(
-    Type.Object({
-      column: Type.String(),
-      'column-reverse': Type.String(),
-      row: Type.String(),
-      'row-reverse': Type.String(),
-    })
-  ),
-  Type.Array(
+export const DirectionSchema = Type.Optional(
+  Type.Union([
     Type.KeyOf(
       Type.Object({
         column: Type.String(),
@@ -21,16 +13,26 @@ export const DirectionSchema = Type.Union([
         row: Type.String(),
         'row-reverse': Type.String(),
       })
-    )
-  ),
-]);
-export const FlexWrapSchema = Type.KeyOf(
+    ),
+    Type.Array(
+      Type.KeyOf(
+        Type.Object({
+          column: Type.String(),
+          'column-reverse': Type.String(),
+          row: Type.String(),
+          'row-reverse': Type.String(),
+        })
+      )
+    ),
+  ])
+);
+export const FlexWrapSchema = Type.Optional(Type.KeyOf(
   Type.Object({
     nowrap: Type.String(),
     wrap: Type.String(),
     'wrap-reverse': Type.String(),
   })
-);
+));
 export const AlignItemsSchema = Type.String();
 export const JustifyContentSchema = Type.String();
 export const SpacingSchema = Type.Union([Type.String(), Type.Number()]);
