@@ -35,7 +35,10 @@ import 'tern/plugin/complete_strings';
 import tern, { Def } from 'tern';
 import { getTypeString } from '../../../utils/type';
 import ecmascript from '../../../constants/ecmascript';
+import exDefs from '../../../constants/ex-defs.json';
+import exDefs1 from '../../../constants/ex-defs1.json';
 import { PREVENT_POPOVER_WIDGET_CLOSE_CLASS } from '../../../constants';
+// import { TernServer } from './TernServer';
 
 injectGlobal`
   .CodeMirror-hints {
@@ -81,8 +84,9 @@ const getCursorIndex = (editor: CodeMirror.Editor) => {
 };
 
 function installTern(cm: CodeMirror.Editor) {
+  // const t = new TernServer();
   const t = new CodeMirror.TernServer({ defs: [ecmascript as unknown as Def] });
-  cm.on('cursorActivity', cm => t.updateArgHints(cm));
+  // cm.on('cursorActivity', cm => t.updateArgHints(cm));
   cm.on('change', (_instance, change) => {
     if (!checkIfCursorInsideBinding(_instance)) {
       return;
@@ -102,7 +106,29 @@ function installTern(cm: CodeMirror.Editor) {
       // not changed by auto-complete
       change.origin !== 'complete'
     ) {
+      console.log('change', change);
+      // const cur = cm.getCursor();
+      // cm.showHint({
+      //   hint: () => {
+      //     return {
+      //       from: cm.getCursor(),
+      //       to: cm.getCursor(),
+      //       list: ['b1', 'b2', 'b3'],
+      //     };
+      //   },
+      // });
+
+      console.log(
+        `%c ======================start input：${change.text}==================`,
+        'color: yellow; font-size: 20px; background: black; padding: 2px 5px; '
+      );
+      console.time('complete');
       t.complete(cm);
+      console.timeEnd('complete');
+      console.log(
+        '%c ======================end==================',
+        'color: yellow; font-size: 20px; background: black; padding: 2px 5px;'
+      );
     }
   });
   return t;
@@ -236,11 +262,16 @@ const BaseExpressionEditor = React.forwardRef<
           mode: {
             name: 'sunmao-ui',
           },
+          pollInterval: 200,
           tabindex: 1,
           lineWrapping: true,
           theme: 'neat',
           viewportMargin: Infinity,
+          showHint: true,
           hintOptions: {
+            // moveOnOverlap:false,
+            // paddingForScrollbar:false,
+            // updateOnCursorActivity: false,
             completeSingle: false,
           },
           autoRefresh: { delay: 50 },
@@ -286,8 +317,9 @@ const BaseExpressionEditor = React.forwardRef<
     }, [defaultCode, onChange, onFocus, onBlur, compact]);
     useEffect(() => {
       if (defs) {
+        console.log('defs', defs);
         tServer.current?.deleteDefs('customDataTree');
-        tServer.current?.addDefs(defs[0] as any, true);
+        tServer.current?.addDefs({...exDefs,...exDefs1} as any, true);
       }
     }, [defs]);
 

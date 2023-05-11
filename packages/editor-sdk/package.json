@@ -18,6 +18,7 @@
   ],
   "scripts": {
     "build": "tsup && npm run visualize",
+    "vbuild": "vite build",
     "dev": "tsup --platform browser",
     "typings": "tsc --emitDeclarationOnly",
     "prepublish": "npm run build && npm run typings",
@@ -26,6 +27,11 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.15",
+    "@codemirror/autocomplete": "^0.20.3",
+    "@codemirror/lang-css": "0.20",
+    "@codemirror/lang-html": "0.20",
+    "@codemirror/lang-javascript": "^0.20.1",
+    "@codemirror/lang-json": "0.20.0",
     "@chakra-ui/react": "^1.7.1",
     "@emotion/css": "^11.7.1",
     "@sinclair/typebox": "^0.21.2",
@@ -33,7 +39,7 @@
     "@sunmao-ui/runtime": "^0.10.2",
     "@sunmao-ui/shared": "^0.10.1",
     "ajv": "^8.8.2",
-    "codemirror": "^5.65.9",
+    "eslint4b-prebuilt-2": "^7.32.2",
     "formik": "^2.2.9",
     "framer-motion": "^3.10.6",
     "immer": "^9.0.6",
@@ -42,11 +48,15 @@
     "mobx": "^6.3.8",
     "mobx-react-lite": "^3.2.2",
     "rc-select": "^14.1.5",
+    "rc-trigger": "^5.3.4",
     "react-color": "^2.19.3",
+    "really-relaxed-json": "^0.3.2",
+    "styled-components": "^5.3.10",
     "tern": "^0.24.3"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
+    "@types/styled-components": "^5.1.26",
     "@types/tern": "^0.23.4",
     "@vitejs/plugin-react": "^2.0.1",
     "esbuild": "^0.15.5",
@@ -69,5 +79,14 @@
     "react": "16.x || 17.x",
     "react-dom": "16.x || 17.x",
     "tern": "^0.24.3"
+  },
+  "resolutions": {
+    "@codemirror/autocomplete": "0.20.0",
+    "@codemirror/lang-css": "0.20",
+    "@codemirror/lang-html": "0.20",
+    "@codemirror/lang-javascript": "^0.20.1",
+    "@codemirror/lang-json": "0.20.0",
+    "@codemirror/lang-sql": "^0.20.4",
+    "@codemirror/view": "0.20.7"
   }
 }

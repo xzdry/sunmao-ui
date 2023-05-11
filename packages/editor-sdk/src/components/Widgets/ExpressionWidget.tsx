@@ -9,6 +9,7 @@ import { getType, getTypeString, Types } from '../../utils/type';
 import { ValidateFunction } from 'ajv';
 import { ExpressionError } from '@sunmao-ui/runtime';
 import { CORE_VERSION, CoreWidgetName, initAjv } from '@sunmao-ui/shared';
+import { CodeEditor } from '../codeEditor/codeEditor';
 
 // FIXME: move into a new package and share with runtime?
 export function isNumeric(x: string | number) {
@@ -215,20 +216,21 @@ export const ExpressionWidget: React.FC<WidgetProps<ExpressionWidgetType>> = pro
   }, [code]);
 
   return (
-    <ExpressionEditor
-      compactOptions={{
-        maxHeight: '125px',
-        ...(widgetOptions?.compactOptions || {}),
-      }}
-      ref={editorRef}
-      defaultCode={code}
-      evaledValue={evaledValue}
-      error={error}
-      defs={defs}
-      onChange={onCodeChange}
-      onBlur={onChange}
-      onFocus={onFocus}
-    />
+    // <ExpressionEditor
+    //   compactOptions={{
+    //     maxHeight: '125px',
+    //     ...(widgetOptions?.compactOptions || {}),
+    //   }}
+    //   ref={editorRef}
+    //   defaultCode={code}
+    //   evaledValue={evaledValue}
+    //   error={error}
+    //   defs={defs}
+    //   onChange={onCodeChange}
+    //   onBlur={onChange}
+    //   onFocus={onFocus}
+    // />
+    <CodeEditor />
   );
 };
 
